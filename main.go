@@ -78,7 +78,7 @@ func (m *MemTable) Inset(data string, memTable *Builder) {
 		fmt.Println(m.bptree.GetRoot())
 		//send for next computing
 		m.bptree = BPTree.New[string, int](50)
-	
+
 		memTable.Clear()
 	}
 
@@ -146,4 +146,26 @@ func LoadDataStack() []byte {
 	// fmt.Println("byte loaded | ", n)
 
 	return load
+}
+
+type Linker struct {
+	*BPTree.Tree[string, int]
+	*Builder
+}
+
+func NewLinker(tree *BPTree.Tree[string, int], builder *Builder) Linker {
+	return Linker{
+		Tree:    tree,
+		Builder: builder,
+	}
+}
+
+type Controller struct {
+	linker chan Linker
+}
+
+func New() Controller {
+	return Controller{
+		linker: make(chan Linker),
+	}
 }
